@@ -74,7 +74,10 @@ func (s *uploadMediaStep) Execute(ctx context.Context, _ map[string]any, _ map[s
 		return &sdk.StepResult{Output: map[string]any{"error": err.Error()}}, nil
 	}
 	defer resp.Body.Close()
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return &sdk.StepResult{Output: map[string]any{"error": "read response: " + err.Error()}}, nil
+	}
 
 	if resp.StatusCode >= 400 {
 		return &sdk.StepResult{Output: map[string]any{"error": fmt.Sprintf("HTTP %d: %s", resp.StatusCode, string(body))}}, nil

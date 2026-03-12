@@ -144,6 +144,21 @@ func TestSendTemplateStep_Success(t *testing.T) {
 	}
 }
 
+func TestSendLocationStep_MissingCoords(t *testing.T) {
+	step, _ := newSendLocationStep("s", map[string]any{})
+	RegisterClient("turnio", NewTurnClient("tok", "http://localhost"))
+	defer UnregisterClient("turnio")
+	res, err := step.Execute(context.Background(), nil, nil, map[string]any{
+		"to": "+27123456789",
+	}, nil, map[string]any{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Output["error"] == nil {
+		t.Fatal("expected error for missing longitude/latitude")
+	}
+}
+
 func TestSendLocationStep_Success(t *testing.T) {
 	_, cleanup := setupTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

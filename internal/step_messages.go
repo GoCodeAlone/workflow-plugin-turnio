@@ -202,6 +202,9 @@ func (s *sendLocationStep) Execute(ctx context.Context, _ map[string]any, _ map[
 	if to == "" {
 		return &sdk.StepResult{Output: map[string]any{"error": "to is required"}}, nil
 	}
+	if !hasKey("longitude", current, config) || !hasKey("latitude", current, config) {
+		return &sdk.StepResult{Output: map[string]any{"error": "longitude and latitude are required"}}, nil
+	}
 	longitude := resolveFloat64("longitude", current, config)
 	latitude := resolveFloat64("latitude", current, config)
 

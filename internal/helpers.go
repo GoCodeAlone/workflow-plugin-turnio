@@ -1,6 +1,6 @@
 package internal
 
-import "fmt"
+import "strconv"
 
 // getModuleName returns the "module" key from a step config map, defaulting to "turnio".
 func getModuleName(config map[string]any) string {
@@ -67,6 +67,15 @@ func resolveStringSlice(key string, current, config map[string]any) []string {
 	return nil
 }
 
+// hasKey reports whether key exists in current or config (regardless of value).
+func hasKey(key string, current, config map[string]any) bool {
+	if _, ok := current[key]; ok {
+		return true
+	}
+	_, ok := config[key]
+	return ok
+}
+
 // resolveMap looks up key in current first, then config as map[string]any.
 func resolveMap(key string, current, config map[string]any) map[string]any {
 	if v, ok := current[key].(map[string]any); ok {
@@ -107,8 +116,7 @@ func toInt64(v any) int64 {
 	case float32:
 		return int64(t)
 	case string:
-		var n int64
-		fmt.Sscanf(t, "%d", &n)
+		n, _ := strconv.ParseInt(t, 10, 64)
 		return n
 	}
 	return 0
@@ -125,8 +133,7 @@ func toFloat64(v any) float64 {
 	case int:
 		return float64(t)
 	case string:
-		var f float64
-		fmt.Sscanf(t, "%f", &f)
+		f, _ := strconv.ParseFloat(t, 64)
 		return f
 	}
 	return 0
