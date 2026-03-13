@@ -29,8 +29,8 @@ func (s *configureWebhookStep) Execute(ctx context.Context, _ map[string]any, _ 
 	}
 
 	payload := map[string]any{
-		"webhooks": []map[string]any{
-			{"url": webhookURL},
+		"webhooks": []any{
+			map[string]any{"url": webhookURL},
 		},
 	}
 
