@@ -106,8 +106,11 @@ func resolveInt(key string, current, config map[string]any) int {
 // resolveIntDefault looks up key in current first, then config as int.
 // If the key is absent from both maps, def is returned.
 func resolveIntDefault(key string, def int, current, config map[string]any) int {
-	if hasKey(key, current, config) {
-		return resolveInt(key, current, config)
+	if _, ok := current[key]; ok {
+		return int(toInt64(current[key]))
+	}
+	if _, ok := config[key]; ok {
+		return int(toInt64(config[key]))
 	}
 	return def
 }
