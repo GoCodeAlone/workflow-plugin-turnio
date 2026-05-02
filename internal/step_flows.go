@@ -103,7 +103,7 @@ func (s *sendFlowStep) Execute(ctx context.Context, _ map[string]any, _ map[stri
 					"flow_id":              flowID,
 					"flow_cta":             resolveValue("flow_cta", current, config),
 					"flow_action":          resolveValue("flow_action", current, config),
-					"flow_message_version": fmt.Sprintf("%d", resolveInt("flow_message_version", current, config)),
+					"flow_message_version": fmt.Sprintf("%d", resolveIntDefault("flow_message_version", 3, current, config)),
 				},
 			},
 		},

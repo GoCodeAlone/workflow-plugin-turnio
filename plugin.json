@@ -1,6 +1,6 @@
 {
     "name": "workflow-plugin-turnio",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "turn.io WhatsApp API integration plugin",
     "author": "GoCodeAlone",
     "license": "MIT",

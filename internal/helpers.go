@@ -103,6 +103,15 @@ func resolveInt(key string, current, config map[string]any) int {
 	return int(resolveInt64(key, current, config))
 }
 
+// resolveIntDefault looks up key in current first, then config as int.
+// If the key is absent from both maps, def is returned.
+func resolveIntDefault(key string, def int, current, config map[string]any) int {
+	if hasKey(key, current, config) {
+		return resolveInt(key, current, config)
+	}
+	return def
+}
+
 func toInt64(v any) int64 {
 	switch t := v.(type) {
 	case int64:
