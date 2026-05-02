@@ -100,36 +100,63 @@ func resolveBool(key string, current, config map[string]any) bool {
 
 // resolveInt looks up key in current first, then config as int.
 func resolveInt(key string, current, config map[string]any) int {
-	return toInt(resolveInt64(key, current, config))
+	if v, ok := resolveIntValue(key, current, config); ok {
+		return v
+	}
+	return 0
 }
 
 // resolveIntDefault looks up key in current first, then config as int.
 // If the key is absent from both maps, def is returned.
 func resolveIntDefault(key string, def int, current, config map[string]any) int {
-	if _, ok := current[key]; ok {
-		return toInt(current[key])
+	if v, ok := current[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n
+		}
 	}
-	if _, ok := config[key]; ok {
-		return toInt(config[key])
+	if v, ok := config[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n
+		}
 	}
 	return def
 }
 
-func toInt(v any) int {
-	n := toInt64(v)
-	if strconv.IntSize == 32 {
-		const (
-			maxInt32 = int64(1<<31 - 1)
-			minInt32 = int64(-1 << 31)
-		)
-		switch {
-		case n > maxInt32:
-			return int(maxInt32)
-		case n < minInt32:
-			return int(minInt32)
+func resolveIntValue(key string, current, config map[string]any) (int, bool) {
+	if v, ok := current[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n, true
 		}
 	}
-	return int(n)
+	if v, ok := config[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n, true
+		}
+	}
+	return 0, false
+}
+
+func toInt(v any) (int, bool) {
+	switch t := v.(type) {
+	case int:
+		return t, true
+	case int64:
+		return atoiOK(strconv.FormatInt(t, 10))
+	case int32:
+		return atoiOK(strconv.FormatInt(int64(t), 10))
+	case float64:
+		return atoiOK(strconv.FormatInt(int64(t), 10))
+	case float32:
+		return atoiOK(strconv.FormatInt(int64(t), 10))
+	case string:
+		return atoiOK(t)
+	}
+	return 0, false
+}
+
+func atoiOK(s string) (int, bool) {
+	n, err := strconv.Atoi(s)
+	return n, err == nil
 }
 
 func toInt64(v any) int64 {

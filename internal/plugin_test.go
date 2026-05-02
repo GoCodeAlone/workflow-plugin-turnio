@@ -66,20 +66,6 @@ func TestModuleSchemas(t *testing.T) {
 // entry for every step type advertised by the plugin, ensuring no step is missing
 // a contract descriptor.
 func TestPluginManifestStepSchemas(t *testing.T) {
-	// Locate plugin.json relative to the repo root.
-	_, file, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller failed")
-	}
-	// internal/ → repo root
-	repoRoot := filepath.Join(filepath.Dir(file), "..")
-	manifestPath := filepath.Join(repoRoot, "plugin.json")
-
-	data, err := os.ReadFile(manifestPath)
-	if err != nil {
-		t.Fatalf("read plugin.json: %v", err)
-	}
-
 	var manifest struct {
 		StepTypes   []string `json:"stepTypes"`
 		ModuleTypes []string `json:"moduleTypes"`
@@ -87,9 +73,7 @@ func TestPluginManifestStepSchemas(t *testing.T) {
 			Type string `json:"type"`
 		} `json:"stepSchemas"`
 	}
-	if err := json.Unmarshal(data, &manifest); err != nil {
-		t.Fatalf("parse plugin.json: %v", err)
-	}
+	loadManifest(t, &manifest)
 
 	// Build a set of schema types.
 	schemaTypes := make(map[string]bool, len(manifest.StepSchemas))
@@ -124,18 +108,6 @@ func TestPluginManifestStepSchemas(t *testing.T) {
 // has at least one configField and at least one output, which are required for
 // a valid strict contract descriptor.
 func TestPluginManifestSchemaFields(t *testing.T) {
-	_, file, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller failed")
-	}
-	repoRoot := filepath.Join(filepath.Dir(file), "..")
-	manifestPath := filepath.Join(repoRoot, "plugin.json")
-
-	data, err := os.ReadFile(manifestPath)
-	if err != nil {
-		t.Fatalf("read plugin.json: %v", err)
-	}
-
 	var manifest struct {
 		StepSchemas []struct {
 			Type         string `json:"type"`
@@ -150,9 +122,7 @@ func TestPluginManifestSchemaFields(t *testing.T) {
 			} `json:"outputs"`
 		} `json:"stepSchemas"`
 	}
-	if err := json.Unmarshal(data, &manifest); err != nil {
-		t.Fatalf("parse plugin.json: %v", err)
-	}
+	loadManifest(t, &manifest)
 
 	for _, s := range manifest.StepSchemas {
 		if s.Description == "" {
@@ -180,5 +150,26 @@ func TestPluginManifestSchemaFields(t *testing.T) {
 				t.Errorf("step schema %q output %q has an empty type", s.Type, o.Key)
 			}
 		}
+	}
+}
+
+func repoRoot(t *testing.T) string {
+	t.Helper()
+	_, file, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller failed")
+	}
+	return filepath.Join(filepath.Dir(file), "..")
+}
+
+func loadManifest(t *testing.T, out any) {
+	t.Helper()
+	manifestPath := filepath.Join(repoRoot(t), "plugin.json")
+	data, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatalf("read plugin.json: %v", err)
+	}
+	if err := json.Unmarshal(data, out); err != nil {
+		t.Fatalf("parse plugin.json: %v", err)
 	}
 }
