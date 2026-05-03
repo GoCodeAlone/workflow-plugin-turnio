@@ -7,6 +7,9 @@ import (
 	sdk "github.com/GoCodeAlone/workflow/plugin/external/sdk"
 )
 
+// Compile-time assertion: turnIOPlugin implements sdk.SchemaProvider.
+var _ sdk.SchemaProvider = (*turnIOPlugin)(nil)
+
 // Version is set at build time via -ldflags
 // "-X github.com/GoCodeAlone/workflow-plugin-turnio/internal.Version=X.Y.Z".
 // Default is a bare semver so plugin loaders that validate semver accept
@@ -144,5 +147,33 @@ func (p *turnIOPlugin) CreateStep(typeName, name string, config map[string]any) 
 		return newSetContextStep(name, config)
 	default:
 		return nil, fmt.Errorf("turnio plugin: unknown step type %q", typeName)
+	}
+}
+
+// ModuleSchemas returns the strict contract descriptor for the turnio.provider module,
+// declaring all accepted configuration fields and their types. Implementing
+// sdk.SchemaProvider enables wfctl strict-contract audit to verify module coverage.
+func (p *turnIOPlugin) ModuleSchemas() []sdk.ModuleSchemaData {
+	return []sdk.ModuleSchemaData{
+		{
+			Type:        "turnio.provider",
+			Label:       "Turn.io Provider",
+			Category:    "messaging",
+			Description: "turn.io WhatsApp Business API provider. Manages an authenticated HTTP client for turn.io API calls.",
+			ConfigFields: []sdk.ConfigField{
+				{
+					Name:        "apiToken",
+					Type:        "string",
+					Description: "turn.io API bearer token used to authenticate all API requests.",
+					Required:    true,
+				},
+				{
+					Name:         "baseUrl",
+					Type:         "string",
+					Description:  "turn.io API base URL. Defaults to https://whatsapp.turn.io.",
+					DefaultValue: "https://whatsapp.turn.io",
+				},
+			},
+		},
 	}
 }

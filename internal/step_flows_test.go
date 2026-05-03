@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"testing"
 )
@@ -99,5 +100,74 @@ func TestSendFlowStep_HTTPError(t *testing.T) {
 	}
 	if res.Output["error"] == nil {
 		t.Fatal("expected error for 4xx response")
+	}
+}
+
+func TestSendFlowStep_FlowMessageVersionDefaultAndOverride(t *testing.T) {
+	tests := []struct {
+		name    string
+		current map[string]any
+		config  map[string]any
+		want    string
+	}{
+		{
+			name:    "default",
+			current: map[string]any{"to": "+27123456789", "flow_id": "flow-1"},
+			config:  map[string]any{},
+			want:    "3",
+		},
+		{
+			name:    "current zero overrides default",
+			current: map[string]any{"to": "+27123456789", "flow_id": "flow-1", "flow_message_version": 0},
+			config:  map[string]any{"flow_message_version": 7},
+			want:    "0",
+		},
+		{
+			name:    "config override",
+			current: map[string]any{"to": "+27123456789", "flow_id": "flow-1"},
+			config:  map[string]any{"flow_message_version": 2},
+			want:    "2",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, cleanup := setupTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+				if r.Method != "POST" || r.URL.Path != "/v1/messages" {
+					t.Errorf("unexpected %s %s", r.Method, r.URL.Path)
+				}
+				var payload map[string]any
+				if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+					t.Fatalf("decode payload: %v", err)
+				}
+				interactive, ok := payload["interactive"].(map[string]any)
+				if !ok {
+					t.Fatal("payload.interactive is not a map")
+				}
+				action, ok := interactive["action"].(map[string]any)
+				if !ok {
+					t.Fatal("payload.interactive.action is not a map")
+				}
+				params, ok := action["parameters"].(map[string]any)
+				if !ok {
+					t.Fatal("payload.interactive.action.parameters is not a map")
+				}
+				got := params["flow_message_version"]
+				if got != tt.want {
+					t.Fatalf("flow_message_version = %v, want %q", got, tt.want)
+				}
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{"messages":[{"id":"msg1"}]}`))
+			})
+			defer cleanup()
+
+			step, _ := newSendFlowStep("s", map[string]any{})
+			res, err := step.Execute(context.Background(), nil, nil, tt.current, nil, tt.config)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if errVal, ok := res.Output["error"]; ok {
+				t.Fatalf("unexpected error: %v", errVal)
+			}
+		})
 	}
 }

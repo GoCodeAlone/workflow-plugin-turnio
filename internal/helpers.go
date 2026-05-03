@@ -22,14 +22,6 @@ func resolveValue(key string, current, config map[string]any) string {
 	return ""
 }
 
-// resolveInt64 looks up key in current first, then config as int64.
-func resolveInt64(key string, current, config map[string]any) int64 {
-	if v := toInt64(current[key]); v != 0 {
-		return v
-	}
-	return toInt64(config[key])
-}
-
 // resolveFloat64 looks up key in current first, then config as float64.
 func resolveFloat64(key string, current, config map[string]any) float64 {
 	if v := toFloat64(current[key]); v != 0 {
@@ -100,26 +92,63 @@ func resolveBool(key string, current, config map[string]any) bool {
 
 // resolveInt looks up key in current first, then config as int.
 func resolveInt(key string, current, config map[string]any) int {
-	return int(resolveInt64(key, current, config))
-}
-
-func toInt64(v any) int64 {
-	switch t := v.(type) {
-	case int64:
-		return t
-	case int:
-		return int64(t)
-	case int32:
-		return int64(t)
-	case float64:
-		return int64(t)
-	case float32:
-		return int64(t)
-	case string:
-		n, _ := strconv.ParseInt(t, 10, 64)
-		return n
+	if v, ok := resolveIntValue(key, current, config); ok {
+		return v
 	}
 	return 0
+}
+
+// resolveIntDefault looks up key in current first, then config as int.
+// If the key is absent from both maps, def is returned.
+func resolveIntDefault(key string, def int, current, config map[string]any) int {
+	if v, ok := current[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n
+		}
+	}
+	if v, ok := config[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n
+		}
+	}
+	return def
+}
+
+func resolveIntValue(key string, current, config map[string]any) (int, bool) {
+	if v, ok := current[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n, true
+		}
+	}
+	if v, ok := config[key]; ok {
+		if n, valid := toInt(v); valid {
+			return n, true
+		}
+	}
+	return 0, false
+}
+
+func toInt(v any) (int, bool) {
+	switch t := v.(type) {
+	case int:
+		return t, true
+	case int64:
+		return atoiOK(strconv.FormatInt(t, 10))
+	case int32:
+		return atoiOK(strconv.FormatInt(int64(t), 10))
+	case float64:
+		return atoiOK(strconv.FormatInt(int64(t), 10))
+	case float32:
+		return atoiOK(strconv.FormatInt(int64(t), 10))
+	case string:
+		return atoiOK(t)
+	}
+	return 0, false
+}
+
+func atoiOK(s string) (int, bool) {
+	n, err := strconv.Atoi(s)
+	return n, err == nil
 }
 
 func toFloat64(v any) float64 {
