@@ -139,7 +139,19 @@ func TestSendFlowStep_FlowMessageVersionDefaultAndOverride(t *testing.T) {
 				if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 					t.Fatalf("decode payload: %v", err)
 				}
-				got := payload["interactive"].(map[string]any)["action"].(map[string]any)["parameters"].(map[string]any)["flow_message_version"]
+				interactive, ok := payload["interactive"].(map[string]any)
+				if !ok {
+					t.Fatal("payload.interactive is not a map")
+				}
+				action, ok := interactive["action"].(map[string]any)
+				if !ok {
+					t.Fatal("payload.interactive.action is not a map")
+				}
+				params, ok := action["parameters"].(map[string]any)
+				if !ok {
+					t.Fatal("payload.interactive.action.parameters is not a map")
+				}
+				got := params["flow_message_version"]
 				if got != tt.want {
 					t.Fatalf("flow_message_version = %v, want %q", got, tt.want)
 				}
