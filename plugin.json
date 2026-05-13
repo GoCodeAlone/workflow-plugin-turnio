@@ -1,13 +1,13 @@
 {
     "name": "workflow-plugin-turnio",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "turn.io WhatsApp API integration plugin",
     "author": "GoCodeAlone",
     "license": "MIT",
     "type": "external",
     "tier": "community",
     "private": false,
-    "minEngineVersion": "0.3.12",
+    "minEngineVersion": "0.51.7",
     "keywords": [
         "whatsapp",
         "turnio",
@@ -1151,22 +1151,22 @@
         {
             "os": "linux",
             "arch": "amd64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.1/workflow-plugin-turnio-linux-amd64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-linux-amd64.tar.gz"
         },
         {
             "os": "linux",
             "arch": "arm64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.1/workflow-plugin-turnio-linux-arm64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-linux-arm64.tar.gz"
         },
         {
             "os": "darwin",
             "arch": "amd64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.1/workflow-plugin-turnio-darwin-amd64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-darwin-amd64.tar.gz"
         },
         {
             "os": "darwin",
             "arch": "arm64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.1/workflow-plugin-turnio-darwin-arm64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-darwin-arm64.tar.gz"
         }
     ],
     "contracts": [
