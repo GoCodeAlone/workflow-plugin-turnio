@@ -1,0 +1,537 @@
+syntax = "proto3";
+
+package workflow.plugin.turnio.v1;
+
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/GoCodeAlone/workflow-plugin-turnio/gen;turnio";
+
+// ── module: turnio.provider ───────────────────────────────────────────────────
+
+// ProviderConfig is the typed config for the turnio.provider module.
+// Fields mirror the keys read in internal/module.go newTurnIOModule.
+message ProviderConfig {
+  // api_token is the turn.io API bearer token (required).
+  string api_token = 1;
+  // base_url overrides the turn.io API base URL. Default: https://whatsapp.turn.io
+  string base_url = 2;
+}
+
+// ── step.turnio_send_text ─────────────────────────────────────────────────────
+
+message SendTextConfig {
+  // module is the name of the turnio.provider module instance to use. Default: "turnio"
+  string module = 1;
+  // to is the recipient phone number in E.164 format (required).
+  string to = 2;
+  // body is the text content of the WhatsApp message (required).
+  string body = 3;
+}
+
+message SendTextInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SendTextOutput {
+  // response is the raw JSON response from the turn.io API.
+  string response = 1;
+  // to is the recipient phone number that was used.
+  string to = 2;
+  // error is populated when the request fails.
+  string error = 3;
+}
+
+// ── step.turnio_send_media ────────────────────────────────────────────────────
+
+message SendMediaConfig {
+  string module = 1;
+  string to = 2;
+  // media_type is the type of media: image, video, audio, document. Default: "image"
+  string media_type = 3;
+  // link is the publicly accessible URL of the media file (required).
+  string link = 4;
+  // caption is optional caption text for the media message.
+  string caption = 5;
+}
+
+message SendMediaInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SendMediaOutput {
+  string response = 1;
+  string to = 2;
+  string error = 3;
+}
+
+// ── step.turnio_send_template ─────────────────────────────────────────────────
+
+message SendTemplateConfig {
+  string module = 1;
+  string to = 2;
+  // template_name is the name of the approved message template (required).
+  string template_name = 3;
+  // namespace is the template namespace (optional).
+  string namespace = 4;
+  // language_code is the BCP-47 language code. Default: "en"
+  string language_code = 5;
+  // components are the template component parameters as JSON.
+  google.protobuf.Struct components = 6;
+}
+
+message SendTemplateInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SendTemplateOutput {
+  string response = 1;
+  string to = 2;
+  string error = 3;
+}
+
+// ── step.turnio_send_interactive ──────────────────────────────────────────────
+
+message SendInteractiveConfig {
+  string module = 1;
+  string to = 2;
+  // interactive is the interactive message payload (required).
+  google.protobuf.Struct interactive = 3;
+}
+
+message SendInteractiveInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SendInteractiveOutput {
+  string response = 1;
+  string to = 2;
+  string error = 3;
+}
+
+// ── step.turnio_send_location ─────────────────────────────────────────────────
+
+message SendLocationConfig {
+  string module = 1;
+  string to = 2;
+  // longitude is the decimal longitude coordinate (required).
+  double longitude = 3;
+  // latitude is the decimal latitude coordinate (required).
+  double latitude = 4;
+  // location_name is the display name of the location.
+  string location_name = 5;
+  // address is the street address of the location.
+  string address = 6;
+}
+
+message SendLocationInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SendLocationOutput {
+  string response = 1;
+  string to = 2;
+  string error = 3;
+}
+
+// ── step.turnio_list_messages ─────────────────────────────────────────────────
+
+message ListMessagesConfig {
+  string module = 1;
+  // contact_id optionally filters messages for a specific contact.
+  string contact_id = 2;
+}
+
+message ListMessagesInput {
+  google.protobuf.Struct data = 1;
+}
+
+message ListMessagesOutput {
+  // messages is the raw JSON list of messages from the turn.io API.
+  string messages = 1;
+  string error = 2;
+}
+
+// ── step.turnio_check_contact ─────────────────────────────────────────────────
+
+message CheckContactConfig {
+  string module = 1;
+  // contacts is the list of phone numbers to check (E.164 format).
+  repeated string contacts = 2;
+  // phone is a single phone number to check (used when contacts is not set).
+  string phone = 3;
+  // blocking controls whether to wait for the result: "wait" or "no_wait". Default: "wait"
+  string blocking = 4;
+}
+
+message CheckContactInput {
+  google.protobuf.Struct data = 1;
+}
+
+message CheckContactOutput {
+  // contacts is the raw JSON response with contact check results.
+  string contacts = 1;
+  string error = 2;
+}
+
+// ── step.turnio_upload_contacts ───────────────────────────────────────────────
+
+message UploadContactsConfig {
+  string module = 1;
+  // contacts is the list of phone numbers in E.164 format to upload (required).
+  repeated string contacts = 2;
+}
+
+message UploadContactsInput {
+  google.protobuf.Struct data = 1;
+}
+
+message UploadContactsOutput {
+  string result = 1;
+  string error = 2;
+}
+
+// ── step.turnio_update_profile ────────────────────────────────────────────────
+
+message UpdateProfileConfig {
+  string module = 1;
+  // profile is the full profile object. If set, individual fields are ignored.
+  google.protobuf.Struct profile = 2;
+  // description is the business description.
+  string description = 3;
+  // email is the business email address.
+  string email = 4;
+  // address is the business address.
+  string address = 5;
+}
+
+message UpdateProfileInput {
+  google.protobuf.Struct data = 1;
+}
+
+message UpdateProfileOutput {
+  string result = 1;
+  string error = 2;
+}
+
+// ── step.turnio_upload_media ──────────────────────────────────────────────────
+
+message UploadMediaConfig {
+  string module = 1;
+  // media_url is the publicly accessible URL of the media to upload.
+  string media_url = 2;
+  // file_data is the raw file data string for multipart upload.
+  string file_data = 3;
+  // file_name is the file name for the multipart upload.
+  string file_name = 4;
+  // mime_type is the MIME content type of the file.
+  string mime_type = 5;
+}
+
+message UploadMediaInput {
+  google.protobuf.Struct data = 1;
+}
+
+message UploadMediaOutput {
+  // result is the raw JSON response containing the uploaded media ID.
+  string result = 1;
+  string error = 2;
+}
+
+// ── step.turnio_get_media ─────────────────────────────────────────────────────
+
+message GetMediaConfig {
+  string module = 1;
+  // media_id is the ID of the media object to retrieve (required).
+  string media_id = 2;
+}
+
+message GetMediaInput {
+  google.protobuf.Struct data = 1;
+}
+
+message GetMediaOutput {
+  // media is the raw JSON response with media metadata.
+  string media = 1;
+  string error = 2;
+}
+
+// ── step.turnio_delete_media ──────────────────────────────────────────────────
+
+message DeleteMediaConfig {
+  string module = 1;
+  // media_id is the ID of the media object to delete (required).
+  string media_id = 2;
+}
+
+message DeleteMediaInput {
+  google.protobuf.Struct data = 1;
+}
+
+message DeleteMediaOutput {
+  // deleted is true when the media was successfully deleted.
+  bool deleted = 1;
+  // media_id is the ID of the deleted media object.
+  string media_id = 2;
+  string error = 3;
+}
+
+// ── step.turnio_create_template ───────────────────────────────────────────────
+
+message CreateTemplateConfig {
+  string module = 1;
+  // template_name is the unique name for the new message template (required).
+  string template_name = 2;
+  // category is the template category: MARKETING, UTILITY, AUTHENTICATION.
+  string category = 3;
+  // language_code is the BCP-47 language code.
+  string language_code = 4;
+  // components are the template component definitions as JSON.
+  google.protobuf.Struct components = 5;
+}
+
+message CreateTemplateInput {
+  google.protobuf.Struct data = 1;
+}
+
+message CreateTemplateOutput {
+  // template is the raw JSON response with created template details.
+  string template = 1;
+  string error = 2;
+}
+
+// ── step.turnio_list_templates ────────────────────────────────────────────────
+
+message ListTemplatesConfig {
+  string module = 1;
+}
+
+message ListTemplatesInput {
+  google.protobuf.Struct data = 1;
+}
+
+message ListTemplatesOutput {
+  // templates is the raw JSON list of message templates.
+  string templates = 1;
+  string error = 2;
+}
+
+// ── step.turnio_fetch_template ────────────────────────────────────────────────
+
+message FetchTemplateConfig {
+  string module = 1;
+  // template_name is the name of the template to fetch (required).
+  string template_name = 2;
+}
+
+message FetchTemplateInput {
+  google.protobuf.Struct data = 1;
+}
+
+message FetchTemplateOutput {
+  // template is the raw JSON response with template details.
+  string template = 1;
+  string error = 2;
+}
+
+// ── step.turnio_update_template ───────────────────────────────────────────────
+
+message UpdateTemplateConfig {
+  string module = 1;
+  // template_name is the name of the template to update (required).
+  string template_name = 2;
+  // updates are the fields to update on the template as JSON.
+  google.protobuf.Struct updates = 3;
+}
+
+message UpdateTemplateInput {
+  google.protobuf.Struct data = 1;
+}
+
+message UpdateTemplateOutput {
+  // template is the raw JSON response with updated template details.
+  string template = 1;
+  string error = 2;
+}
+
+// ── step.turnio_delete_template ───────────────────────────────────────────────
+
+message DeleteTemplateConfig {
+  string module = 1;
+  // template_name is the name of the template to delete (required).
+  string template_name = 2;
+}
+
+message DeleteTemplateInput {
+  google.protobuf.Struct data = 1;
+}
+
+message DeleteTemplateOutput {
+  // deleted is true when the template was successfully deleted.
+  bool deleted = 1;
+  // template_name is the name of the deleted template.
+  string template_name = 2;
+  string error = 3;
+}
+
+// ── step.turnio_configure_webhook ─────────────────────────────────────────────
+
+message ConfigureWebhookConfig {
+  string module = 1;
+  // webhook_url is the HTTPS URL where turn.io should deliver inbound events (required).
+  string webhook_url = 2;
+}
+
+message ConfigureWebhookInput {
+  google.protobuf.Struct data = 1;
+}
+
+message ConfigureWebhookOutput {
+  // result is the raw JSON response from the turn.io API.
+  string result = 1;
+  // webhook_url is the configured webhook URL.
+  string webhook_url = 2;
+  string error = 3;
+}
+
+// ── step.turnio_create_flow ───────────────────────────────────────────────────
+
+message CreateFlowConfig {
+  string module = 1;
+  // flow_name is the unique name for the WhatsApp Flow (required).
+  string flow_name = 2;
+  // description is the human-readable description of the flow.
+  string description = 3;
+  // steps are the flow step definitions as JSON.
+  google.protobuf.Struct steps = 4;
+}
+
+message CreateFlowInput {
+  google.protobuf.Struct data = 1;
+}
+
+message CreateFlowOutput {
+  // flow is the raw JSON response with created flow details.
+  string flow = 1;
+  string error = 2;
+}
+
+// ── step.turnio_list_flows ────────────────────────────────────────────────────
+
+message ListFlowsConfig {
+  string module = 1;
+}
+
+message ListFlowsInput {
+  google.protobuf.Struct data = 1;
+}
+
+message ListFlowsOutput {
+  // flows is the raw JSON list of WhatsApp Flows.
+  string flows = 1;
+  string error = 2;
+}
+
+// ── step.turnio_send_flow ─────────────────────────────────────────────────────
+
+message SendFlowConfig {
+  string module = 1;
+  // to is the recipient phone number in E.164 format (required).
+  string to = 2;
+  // flow_id is the ID of the WhatsApp Flow to send (required).
+  string flow_id = 3;
+  // flow_cta is the button label that opens the flow.
+  string flow_cta = 4;
+  // flow_action is the action to perform when the flow opens.
+  string flow_action = 5;
+  // flow_message_version is the WhatsApp Flow message version number. Default: 3
+  int32 flow_message_version = 6;
+}
+
+message SendFlowInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SendFlowOutput {
+  string response = 1;
+  string to = 2;
+  string flow_id = 3;
+  string error = 4;
+}
+
+// ── step.turnio_list_journeys ─────────────────────────────────────────────────
+
+message ListJourneysConfig {
+  string module = 1;
+}
+
+message ListJourneysInput {
+  google.protobuf.Struct data = 1;
+}
+
+message ListJourneysOutput {
+  // journeys is the raw JSON list of journeys.
+  string journeys = 1;
+  string error = 2;
+}
+
+// ── step.turnio_trigger_journey ───────────────────────────────────────────────
+
+message TriggerJourneyConfig {
+  string module = 1;
+  // journey_id is the ID of the journey to trigger (required).
+  string journey_id = 2;
+  // phone is the contact phone number in E.164 format (required).
+  string phone = 3;
+  // data is optional key-value data to pass into the journey as context.
+  google.protobuf.Struct data = 4;
+}
+
+message TriggerJourneyInput {
+  google.protobuf.Struct data = 1;
+}
+
+message TriggerJourneyOutput {
+  string result = 1;
+  // journey_id is the ID of the triggered journey.
+  string journey_id = 2;
+  string error = 3;
+}
+
+// ── step.turnio_get_context ───────────────────────────────────────────────────
+
+message GetContextConfig {
+  string module = 1;
+  // contact_id is the ID of the contact whose context to retrieve (required).
+  string contact_id = 2;
+}
+
+message GetContextInput {
+  google.protobuf.Struct data = 1;
+}
+
+message GetContextOutput {
+  // context is the raw JSON response containing the contact's context data.
+  string context = 1;
+  string contact_id = 2;
+  string error = 3;
+}
+
+// ── step.turnio_set_context ───────────────────────────────────────────────────
+
+message SetContextConfig {
+  string module = 1;
+  // contact_id is the ID of the contact whose context to update (required).
+  string contact_id = 2;
+  // context_data are the key-value pairs to merge into the contact's context (required).
+  google.protobuf.Struct context_data = 3;
+}
+
+message SetContextInput {
+  google.protobuf.Struct data = 1;
+}
+
+message SetContextOutput {
+  string result = 1;
+  string contact_id = 2;
+  string error = 3;
+}

@@ -1,6 +1,6 @@
 {
     "name": "workflow-plugin-turnio",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "turn.io WhatsApp API integration plugin",
     "author": "GoCodeAlone",
     "license": "MIT",
@@ -1151,154 +1151,154 @@
         {
             "os": "linux",
             "arch": "amd64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-linux-amd64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-linux-amd64.tar.gz"
         },
         {
             "os": "linux",
             "arch": "arm64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-linux-arm64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-linux-arm64.tar.gz"
         },
         {
             "os": "darwin",
             "arch": "amd64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-darwin-amd64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-darwin-amd64.tar.gz"
         },
         {
             "os": "darwin",
             "arch": "arm64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.2/workflow-plugin-turnio-darwin-arm64.tar.gz"
+            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-darwin-arm64.tar.gz"
         }
     ],
     "contracts": [
         {
             "kind": "module",
             "type": "turnio.provider",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_send_text",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_send_media",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_send_template",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_send_interactive",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_send_location",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_list_messages",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_check_contact",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_upload_contacts",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_update_profile",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_upload_media",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_get_media",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_delete_media",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_create_template",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_list_templates",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_fetch_template",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_update_template",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_delete_template",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_configure_webhook",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_create_flow",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_list_flows",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_send_flow",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_list_journeys",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_trigger_journey",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_get_context",
-            "mode": "strict"
+            "mode": "strict_proto"
         },
         {
             "kind": "step",
             "type": "step.turnio_set_context",
-            "mode": "strict"
+            "mode": "strict_proto"
         }
     ]
 }
