@@ -23,8 +23,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Verify plugin.json exists
         run: test -f plugin.json || (echo "plugin.json is missing" && exit 1)
+      - name: Verify plugin.contracts.json exists
+        run: test -f plugin.contracts.json || (echo "plugin.contracts.json is missing" && exit 1)
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
       - name: Validate strict plugin contracts
-        run: go run github.com/GoCodeAlone/workflow/cmd/wfctl@v0.20.1 plugin validate --file plugin.json --strict-contracts
+        run: go run github.com/GoCodeAlone/workflow/cmd/wfctl@v0.51.7 plugin validate --file plugin.json --strict-contracts

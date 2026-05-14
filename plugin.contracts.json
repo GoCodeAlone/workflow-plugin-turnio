@@ -1,0 +1,211 @@
+{
+  "version": "1",
+  "contracts": [
+    {
+      "kind": "module",
+      "type": "turnio.provider",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.ProviderConfig"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_text",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SendTextConfig",
+      "input": "workflow.plugin.turnio.v1.SendTextInput",
+      "output": "workflow.plugin.turnio.v1.SendTextOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_media",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SendMediaConfig",
+      "input": "workflow.plugin.turnio.v1.SendMediaInput",
+      "output": "workflow.plugin.turnio.v1.SendMediaOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_template",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SendTemplateConfig",
+      "input": "workflow.plugin.turnio.v1.SendTemplateInput",
+      "output": "workflow.plugin.turnio.v1.SendTemplateOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_interactive",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SendInteractiveConfig",
+      "input": "workflow.plugin.turnio.v1.SendInteractiveInput",
+      "output": "workflow.plugin.turnio.v1.SendInteractiveOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_location",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SendLocationConfig",
+      "input": "workflow.plugin.turnio.v1.SendLocationInput",
+      "output": "workflow.plugin.turnio.v1.SendLocationOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_messages",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.ListMessagesConfig",
+      "input": "workflow.plugin.turnio.v1.ListMessagesInput",
+      "output": "workflow.plugin.turnio.v1.ListMessagesOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_check_contact",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.CheckContactConfig",
+      "input": "workflow.plugin.turnio.v1.CheckContactInput",
+      "output": "workflow.plugin.turnio.v1.CheckContactOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_upload_contacts",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.UploadContactsConfig",
+      "input": "workflow.plugin.turnio.v1.UploadContactsInput",
+      "output": "workflow.plugin.turnio.v1.UploadContactsOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_update_profile",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.UpdateProfileConfig",
+      "input": "workflow.plugin.turnio.v1.UpdateProfileInput",
+      "output": "workflow.plugin.turnio.v1.UpdateProfileOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_upload_media",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.UploadMediaConfig",
+      "input": "workflow.plugin.turnio.v1.UploadMediaInput",
+      "output": "workflow.plugin.turnio.v1.UploadMediaOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_get_media",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.GetMediaConfig",
+      "input": "workflow.plugin.turnio.v1.GetMediaInput",
+      "output": "workflow.plugin.turnio.v1.GetMediaOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_delete_media",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.DeleteMediaConfig",
+      "input": "workflow.plugin.turnio.v1.DeleteMediaInput",
+      "output": "workflow.plugin.turnio.v1.DeleteMediaOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_create_template",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.CreateTemplateConfig",
+      "input": "workflow.plugin.turnio.v1.CreateTemplateInput",
+      "output": "workflow.plugin.turnio.v1.CreateTemplateOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_templates",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.ListTemplatesConfig",
+      "input": "workflow.plugin.turnio.v1.ListTemplatesInput",
+      "output": "workflow.plugin.turnio.v1.ListTemplatesOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_fetch_template",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.FetchTemplateConfig",
+      "input": "workflow.plugin.turnio.v1.FetchTemplateInput",
+      "output": "workflow.plugin.turnio.v1.FetchTemplateOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_update_template",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.UpdateTemplateConfig",
+      "input": "workflow.plugin.turnio.v1.UpdateTemplateInput",
+      "output": "workflow.plugin.turnio.v1.UpdateTemplateOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_delete_template",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.DeleteTemplateConfig",
+      "input": "workflow.plugin.turnio.v1.DeleteTemplateInput",
+      "output": "workflow.plugin.turnio.v1.DeleteTemplateOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_configure_webhook",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.ConfigureWebhookConfig",
+      "input": "workflow.plugin.turnio.v1.ConfigureWebhookInput",
+      "output": "workflow.plugin.turnio.v1.ConfigureWebhookOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_create_flow",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.CreateFlowConfig",
+      "input": "workflow.plugin.turnio.v1.CreateFlowInput",
+      "output": "workflow.plugin.turnio.v1.CreateFlowOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_flows",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.ListFlowsConfig",
+      "input": "workflow.plugin.turnio.v1.ListFlowsInput",
+      "output": "workflow.plugin.turnio.v1.ListFlowsOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_flow",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SendFlowConfig",
+      "input": "workflow.plugin.turnio.v1.SendFlowInput",
+      "output": "workflow.plugin.turnio.v1.SendFlowOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_journeys",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.ListJourneysConfig",
+      "input": "workflow.plugin.turnio.v1.ListJourneysInput",
+      "output": "workflow.plugin.turnio.v1.ListJourneysOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_trigger_journey",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.TriggerJourneyConfig",
+      "input": "workflow.plugin.turnio.v1.TriggerJourneyInput",
+      "output": "workflow.plugin.turnio.v1.TriggerJourneyOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_get_context",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.GetContextConfig",
+      "input": "workflow.plugin.turnio.v1.GetContextInput",
+      "output": "workflow.plugin.turnio.v1.GetContextOutput"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_set_context",
+      "mode": "strict_proto",
+      "config": "workflow.plugin.turnio.v1.SetContextConfig",
+      "input": "workflow.plugin.turnio.v1.SetContextInput",
+      "output": "workflow.plugin.turnio.v1.SetContextOutput"
+    }
+  ]
+}
