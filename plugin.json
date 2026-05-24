@@ -1300,5 +1300,16 @@
             "type": "step.turnio_set_context",
             "mode": "strict_proto"
         }
-    ]
+    ],
+    "capabilities": {
+        "configProvider": false,
+        "moduleTypes": [
+            "turnio.provider"
+        ],
+        "stepTypes": [
+            "step.turnio_send_media",
+            "step.turnio_send_text"
+        ],
+        "triggerTypes": []
+    }
 }
