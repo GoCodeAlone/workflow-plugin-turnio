@@ -10,5 +10,5 @@ import (
 )
 
 func main() {
-	sdk.Serve(internal.NewTurnIOPlugin())
+	sdk.Serve(internal.NewTurnIOPlugin(), sdk.WithBuildVersion(sdk.ResolveBuildVersion(internal.Version)))
 }
