@@ -1,1315 +1,1323 @@
 {
-    "name": "workflow-plugin-turnio",
-    "version": "0.1.3",
-    "description": "turn.io WhatsApp API integration plugin",
-    "author": "GoCodeAlone",
-    "license": "MIT",
-    "type": "external",
-    "tier": "community",
-    "private": false,
-    "minEngineVersion": "0.51.7",
-    "keywords": [
-        "whatsapp",
-        "turnio",
-        "turn.io",
-        "messaging",
-        "sms",
-        "chatbot"
-    ],
-    "homepage": "https://github.com/GoCodeAlone/workflow-plugin-turnio",
-    "repository": "https://github.com/GoCodeAlone/workflow-plugin-turnio",
+  "name": "workflow-plugin-turnio",
+  "version": "0.1.3",
+  "description": "turn.io WhatsApp API integration plugin",
+  "author": "GoCodeAlone",
+  "license": "MIT",
+  "type": "external",
+  "tier": "community",
+  "private": false,
+  "minEngineVersion": "0.51.7",
+  "required_secrets": [
+    {
+      "name": "TURNIO_API_TOKEN",
+      "sensitive": true,
+      "description": "Turn.io API token. Referenced as ${TURNIO_API_TOKEN} in apiToken.",
+      "prompt": "Turn.io API token"
+    }
+  ],
+  "keywords": [
+    "whatsapp",
+    "turnio",
+    "turn.io",
+    "messaging",
+    "sms",
+    "chatbot"
+  ],
+  "homepage": "https://github.com/GoCodeAlone/workflow-plugin-turnio",
+  "repository": "https://github.com/GoCodeAlone/workflow-plugin-turnio",
+  "moduleTypes": [
+    "turnio.provider"
+  ],
+  "stepTypes": [
+    "step.turnio_send_text",
+    "step.turnio_send_media",
+    "step.turnio_send_template",
+    "step.turnio_send_interactive",
+    "step.turnio_send_location",
+    "step.turnio_list_messages",
+    "step.turnio_check_contact",
+    "step.turnio_upload_contacts",
+    "step.turnio_update_profile",
+    "step.turnio_upload_media",
+    "step.turnio_get_media",
+    "step.turnio_delete_media",
+    "step.turnio_create_template",
+    "step.turnio_list_templates",
+    "step.turnio_fetch_template",
+    "step.turnio_update_template",
+    "step.turnio_delete_template",
+    "step.turnio_configure_webhook",
+    "step.turnio_create_flow",
+    "step.turnio_list_flows",
+    "step.turnio_send_flow",
+    "step.turnio_list_journeys",
+    "step.turnio_trigger_journey",
+    "step.turnio_get_context",
+    "step.turnio_set_context"
+  ],
+  "stepSchemas": [
+    {
+      "type": "step.turnio_send_text",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Sends a plain text WhatsApp message to a phone number via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "type": "string",
+          "description": "Recipient phone number in E.164 format (e.g. +27821234567).",
+          "required": true
+        },
+        {
+          "key": "body",
+          "label": "Message Body",
+          "type": "string",
+          "description": "Text content of the WhatsApp message.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "response",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "description": "Recipient phone number that was used."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_send_media",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Sends a media message (image, video, audio, or document) via the turn.io WhatsApp API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "type": "string",
+          "description": "Recipient phone number in E.164 format.",
+          "required": true
+        },
+        {
+          "key": "media_type",
+          "label": "Media Type",
+          "type": "select",
+          "description": "Type of media to send.",
+          "options": [
+            "image",
+            "video",
+            "audio",
+            "document"
+          ],
+          "defaultValue": "image"
+        },
+        {
+          "key": "link",
+          "label": "Media URL",
+          "type": "string",
+          "description": "Publicly accessible URL of the media file.",
+          "required": true
+        },
+        {
+          "key": "caption",
+          "label": "Caption",
+          "type": "string",
+          "description": "Optional caption text for the media message."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "response",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "description": "Recipient phone number that was used."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_send_template",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Sends a pre-approved WhatsApp message template via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "type": "string",
+          "description": "Recipient phone number in E.164 format.",
+          "required": true
+        },
+        {
+          "key": "template_name",
+          "label": "Template Name",
+          "type": "string",
+          "description": "Name of the approved message template.",
+          "required": true
+        },
+        {
+          "key": "namespace",
+          "label": "Namespace",
+          "type": "string",
+          "description": "Template namespace (optional)."
+        },
+        {
+          "key": "language_code",
+          "label": "Language Code",
+          "type": "string",
+          "description": "BCP-47 language code for the template.",
+          "defaultValue": "en"
+        },
+        {
+          "key": "components",
+          "label": "Components",
+          "type": "json",
+          "description": "Template component parameters (header, body, buttons) as JSON."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "response",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "description": "Recipient phone number that was used."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_send_interactive",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Sends an interactive WhatsApp message (buttons, lists, flows) via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "type": "string",
+          "description": "Recipient phone number in E.164 format.",
+          "required": true
+        },
+        {
+          "key": "interactive",
+          "label": "Interactive Payload",
+          "type": "json",
+          "description": "Interactive message payload object (type, header, body, footer, action).",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "response",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "description": "Recipient phone number that was used."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_send_location",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Sends a location pin as a WhatsApp message via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "type": "string",
+          "description": "Recipient phone number in E.164 format.",
+          "required": true
+        },
+        {
+          "key": "longitude",
+          "label": "Longitude",
+          "type": "number",
+          "description": "Decimal longitude coordinate.",
+          "required": true
+        },
+        {
+          "key": "latitude",
+          "label": "Latitude",
+          "type": "number",
+          "description": "Decimal latitude coordinate.",
+          "required": true
+        },
+        {
+          "key": "location_name",
+          "label": "Location Name",
+          "type": "string",
+          "description": "Display name of the location."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "type": "string",
+          "description": "Street address of the location."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "response",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "description": "Recipient phone number that was used."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_list_messages",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Lists WhatsApp messages, optionally filtered by contact, via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "contact_id",
+          "label": "Contact ID",
+          "type": "string",
+          "description": "Optional contact ID to filter messages for a specific contact."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "messages",
+          "type": "string",
+          "description": "Raw JSON list of messages from the turn.io API."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_check_contact",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Checks whether one or more phone numbers are registered WhatsApp users via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "contacts",
+          "label": "Contacts",
+          "type": "array",
+          "description": "List of phone numbers to check (E.164 format). Use this or 'phone', not both."
+        },
+        {
+          "key": "phone",
+          "label": "Phone",
+          "type": "string",
+          "description": "Single phone number to check (used when 'contacts' is not set)."
+        },
+        {
+          "key": "blocking",
+          "label": "Blocking Mode",
+          "type": "select",
+          "description": "Whether to wait for the result.",
+          "options": [
+            "wait",
+            "no_wait"
+          ],
+          "defaultValue": "wait"
+        }
+      ],
+      "outputs": [
+        {
+          "key": "contacts",
+          "type": "string",
+          "description": "Raw JSON response with contact check results."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_upload_contacts",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Uploads a list of phone numbers to turn.io for contact validation.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "contacts",
+          "label": "Contacts",
+          "type": "array",
+          "description": "List of phone numbers in E.164 format to upload.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_update_profile",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Updates the WhatsApp Business profile information via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "profile",
+          "label": "Profile Object",
+          "type": "json",
+          "description": "Full profile object to set. If provided, individual fields (description, email, address) are ignored."
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "string",
+          "description": "Business description (used when 'profile' is not set)."
+        },
+        {
+          "key": "email",
+          "label": "Email",
+          "type": "string",
+          "description": "Business email address (used when 'profile' is not set)."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "type": "string",
+          "description": "Business address (used when 'profile' is not set)."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_upload_media",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Uploads a media file to turn.io for use in subsequent media messages.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "media_url",
+          "label": "Media URL",
+          "type": "string",
+          "description": "Publicly accessible URL of the media to upload. Use this or file_data, not both."
+        },
+        {
+          "key": "file_data",
+          "label": "File Data",
+          "type": "string",
+          "description": "Raw file data string for multipart upload (used when media_url is not set)."
+        },
+        {
+          "key": "file_name",
+          "label": "File Name",
+          "type": "string",
+          "description": "File name for the multipart upload."
+        },
+        {
+          "key": "mime_type",
+          "label": "MIME Type",
+          "type": "string",
+          "description": "MIME content type of the file (e.g. image/jpeg)."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "description": "Raw JSON response containing the uploaded media ID."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_get_media",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Retrieves metadata for a previously uploaded media object via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "media_id",
+          "label": "Media ID",
+          "type": "string",
+          "description": "ID of the media object to retrieve.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "media",
+          "type": "string",
+          "description": "Raw JSON response with media metadata."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_delete_media",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Deletes a previously uploaded media object from turn.io.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "media_id",
+          "label": "Media ID",
+          "type": "string",
+          "description": "ID of the media object to delete.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "deleted",
+          "type": "boolean",
+          "description": "True when the media was successfully deleted."
+        },
+        {
+          "key": "media_id",
+          "type": "string",
+          "description": "ID of the deleted media object."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_create_template",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Creates a new WhatsApp message template via the turn.io API for approval.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "template_name",
+          "label": "Template Name",
+          "type": "string",
+          "description": "Unique name for the new message template.",
+          "required": true
+        },
+        {
+          "key": "category",
+          "label": "Category",
+          "type": "select",
+          "description": "Template category.",
+          "options": [
+            "MARKETING",
+            "UTILITY",
+            "AUTHENTICATION"
+          ]
+        },
+        {
+          "key": "language_code",
+          "label": "Language Code",
+          "type": "string",
+          "description": "BCP-47 language code for the template."
+        },
+        {
+          "key": "components",
+          "label": "Components",
+          "type": "json",
+          "description": "Template component definitions (header, body, footer, buttons) as JSON."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "template",
+          "type": "string",
+          "description": "Raw JSON response with the created template details."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_list_templates",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Lists all registered WhatsApp message templates via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        }
+      ],
+      "outputs": [
+        {
+          "key": "templates",
+          "type": "string",
+          "description": "Raw JSON list of message templates."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_fetch_template",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Fetches the details of a specific WhatsApp message template by name via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "template_name",
+          "label": "Template Name",
+          "type": "string",
+          "description": "Name of the template to fetch.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "template",
+          "type": "string",
+          "description": "Raw JSON response with template details."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_update_template",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Updates an existing WhatsApp message template via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "template_name",
+          "label": "Template Name",
+          "type": "string",
+          "description": "Name of the template to update.",
+          "required": true
+        },
+        {
+          "key": "updates",
+          "label": "Updates",
+          "type": "json",
+          "description": "Fields to update on the template as JSON object."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "template",
+          "type": "string",
+          "description": "Raw JSON response with the updated template details."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_delete_template",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Deletes a WhatsApp message template by name via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "template_name",
+          "label": "Template Name",
+          "type": "string",
+          "description": "Name of the template to delete.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "deleted",
+          "type": "boolean",
+          "description": "True when the template was successfully deleted."
+        },
+        {
+          "key": "template_name",
+          "type": "string",
+          "description": "Name of the deleted template."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_configure_webhook",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Configures the turn.io webhook endpoint for receiving inbound WhatsApp messages.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "webhook_url",
+          "label": "Webhook URL",
+          "type": "string",
+          "description": "HTTPS URL where turn.io should deliver inbound message events.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "webhook_url",
+          "type": "string",
+          "description": "The configured webhook URL."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_create_flow",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Creates a new WhatsApp Flow via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "flow_name",
+          "label": "Flow Name",
+          "type": "string",
+          "description": "Unique name for the WhatsApp Flow.",
+          "required": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "string",
+          "description": "Human-readable description of the flow."
+        },
+        {
+          "key": "steps",
+          "label": "Flow Steps",
+          "type": "json",
+          "description": "Flow step definitions as a JSON object."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "flow",
+          "type": "string",
+          "description": "Raw JSON response with the created flow details."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_list_flows",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Lists all WhatsApp Flows registered in the turn.io account.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        }
+      ],
+      "outputs": [
+        {
+          "key": "flows",
+          "type": "string",
+          "description": "Raw JSON list of WhatsApp Flows."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_send_flow",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Sends a WhatsApp Flow to a contact as an interactive message via the turn.io API.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "type": "string",
+          "description": "Recipient phone number in E.164 format.",
+          "required": true
+        },
+        {
+          "key": "flow_id",
+          "label": "Flow ID",
+          "type": "string",
+          "description": "ID of the WhatsApp Flow to send.",
+          "required": true
+        },
+        {
+          "key": "flow_cta",
+          "label": "Call-to-Action Text",
+          "type": "string",
+          "description": "Button label that opens the flow (e.g. 'Start')."
+        },
+        {
+          "key": "flow_action",
+          "label": "Flow Action",
+          "type": "string",
+          "description": "Action to perform when the flow opens (e.g. 'navigate')."
+        },
+        {
+          "key": "flow_message_version",
+          "label": "Message Version",
+          "type": "number",
+          "description": "WhatsApp Flow message version number.",
+          "defaultValue": 3
+        }
+      ],
+      "outputs": [
+        {
+          "key": "response",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "to",
+          "type": "string",
+          "description": "Recipient phone number that was used."
+        },
+        {
+          "key": "flow_id",
+          "type": "string",
+          "description": "ID of the flow that was sent."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_list_journeys",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Lists all Journey automations configured in the turn.io account.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        }
+      ],
+      "outputs": [
+        {
+          "key": "journeys",
+          "type": "string",
+          "description": "Raw JSON list of journeys."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_trigger_journey",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Triggers a turn.io Journey automation for a specific contact by phone number.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "journey_id",
+          "label": "Journey ID",
+          "type": "string",
+          "description": "ID of the journey to trigger.",
+          "required": true
+        },
+        {
+          "key": "phone",
+          "label": "Phone",
+          "type": "string",
+          "description": "Contact phone number in E.164 format.",
+          "required": true
+        },
+        {
+          "key": "data",
+          "label": "Data",
+          "type": "json",
+          "description": "Optional key-value data to pass into the journey as context."
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "journey_id",
+          "type": "string",
+          "description": "ID of the triggered journey."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_get_context",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Retrieves the conversation context data stored for a contact in turn.io.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "contact_id",
+          "label": "Contact ID",
+          "type": "string",
+          "description": "ID of the contact whose context to retrieve.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "context",
+          "type": "string",
+          "description": "Raw JSON response containing the contact's context data."
+        },
+        {
+          "key": "contact_id",
+          "type": "string",
+          "description": "ID of the contact."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    },
+    {
+      "type": "step.turnio_set_context",
+      "plugin": "workflow-plugin-turnio",
+      "description": "Updates the conversation context data stored for a contact in turn.io.",
+      "configFields": [
+        {
+          "key": "module",
+          "label": "Module",
+          "type": "string",
+          "description": "Name of the turnio.provider module instance to use.",
+          "defaultValue": "turnio"
+        },
+        {
+          "key": "contact_id",
+          "label": "Contact ID",
+          "type": "string",
+          "description": "ID of the contact whose context to update.",
+          "required": true
+        },
+        {
+          "key": "context_data",
+          "label": "Context Data",
+          "type": "json",
+          "description": "Key-value pairs to merge into the contact's context.",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "description": "Raw JSON response from the turn.io API."
+        },
+        {
+          "key": "contact_id",
+          "type": "string",
+          "description": "ID of the contact."
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "description": "Error message if the request failed."
+        }
+      ]
+    }
+  ],
+  "downloads": [
+    {
+      "os": "linux",
+      "arch": "amd64",
+      "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-linux-amd64.tar.gz"
+    },
+    {
+      "os": "linux",
+      "arch": "arm64",
+      "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-linux-arm64.tar.gz"
+    },
+    {
+      "os": "darwin",
+      "arch": "amd64",
+      "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-darwin-amd64.tar.gz"
+    },
+    {
+      "os": "darwin",
+      "arch": "arm64",
+      "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-darwin-arm64.tar.gz"
+    }
+  ],
+  "contracts": [
+    {
+      "kind": "module",
+      "type": "turnio.provider",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_text",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_media",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_template",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_interactive",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_location",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_messages",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_check_contact",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_upload_contacts",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_update_profile",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_upload_media",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_get_media",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_delete_media",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_create_template",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_templates",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_fetch_template",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_update_template",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_delete_template",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_configure_webhook",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_create_flow",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_flows",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_send_flow",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_list_journeys",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_trigger_journey",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_get_context",
+      "mode": "strict_proto"
+    },
+    {
+      "kind": "step",
+      "type": "step.turnio_set_context",
+      "mode": "strict_proto"
+    }
+  ],
+  "capabilities": {
+    "configProvider": false,
     "moduleTypes": [
-        "turnio.provider"
+      "turnio.provider"
     ],
     "stepTypes": [
-        "step.turnio_send_text",
-        "step.turnio_send_media",
-        "step.turnio_send_template",
-        "step.turnio_send_interactive",
-        "step.turnio_send_location",
-        "step.turnio_list_messages",
-        "step.turnio_check_contact",
-        "step.turnio_upload_contacts",
-        "step.turnio_update_profile",
-        "step.turnio_upload_media",
-        "step.turnio_get_media",
-        "step.turnio_delete_media",
-        "step.turnio_create_template",
-        "step.turnio_list_templates",
-        "step.turnio_fetch_template",
-        "step.turnio_update_template",
-        "step.turnio_delete_template",
-        "step.turnio_configure_webhook",
-        "step.turnio_create_flow",
-        "step.turnio_list_flows",
-        "step.turnio_send_flow",
-        "step.turnio_list_journeys",
-        "step.turnio_trigger_journey",
-        "step.turnio_get_context",
-        "step.turnio_set_context"
+      "step.turnio_send_media",
+      "step.turnio_send_text"
     ],
-    "stepSchemas": [
-        {
-            "type": "step.turnio_send_text",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Sends a plain text WhatsApp message to a phone number via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "to",
-                    "label": "To",
-                    "type": "string",
-                    "description": "Recipient phone number in E.164 format (e.g. +27821234567).",
-                    "required": true
-                },
-                {
-                    "key": "body",
-                    "label": "Message Body",
-                    "type": "string",
-                    "description": "Text content of the WhatsApp message.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "response",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "to",
-                    "type": "string",
-                    "description": "Recipient phone number that was used."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_send_media",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Sends a media message (image, video, audio, or document) via the turn.io WhatsApp API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "to",
-                    "label": "To",
-                    "type": "string",
-                    "description": "Recipient phone number in E.164 format.",
-                    "required": true
-                },
-                {
-                    "key": "media_type",
-                    "label": "Media Type",
-                    "type": "select",
-                    "description": "Type of media to send.",
-                    "options": [
-                        "image",
-                        "video",
-                        "audio",
-                        "document"
-                    ],
-                    "defaultValue": "image"
-                },
-                {
-                    "key": "link",
-                    "label": "Media URL",
-                    "type": "string",
-                    "description": "Publicly accessible URL of the media file.",
-                    "required": true
-                },
-                {
-                    "key": "caption",
-                    "label": "Caption",
-                    "type": "string",
-                    "description": "Optional caption text for the media message."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "response",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "to",
-                    "type": "string",
-                    "description": "Recipient phone number that was used."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_send_template",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Sends a pre-approved WhatsApp message template via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "to",
-                    "label": "To",
-                    "type": "string",
-                    "description": "Recipient phone number in E.164 format.",
-                    "required": true
-                },
-                {
-                    "key": "template_name",
-                    "label": "Template Name",
-                    "type": "string",
-                    "description": "Name of the approved message template.",
-                    "required": true
-                },
-                {
-                    "key": "namespace",
-                    "label": "Namespace",
-                    "type": "string",
-                    "description": "Template namespace (optional)."
-                },
-                {
-                    "key": "language_code",
-                    "label": "Language Code",
-                    "type": "string",
-                    "description": "BCP-47 language code for the template.",
-                    "defaultValue": "en"
-                },
-                {
-                    "key": "components",
-                    "label": "Components",
-                    "type": "json",
-                    "description": "Template component parameters (header, body, buttons) as JSON."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "response",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "to",
-                    "type": "string",
-                    "description": "Recipient phone number that was used."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_send_interactive",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Sends an interactive WhatsApp message (buttons, lists, flows) via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "to",
-                    "label": "To",
-                    "type": "string",
-                    "description": "Recipient phone number in E.164 format.",
-                    "required": true
-                },
-                {
-                    "key": "interactive",
-                    "label": "Interactive Payload",
-                    "type": "json",
-                    "description": "Interactive message payload object (type, header, body, footer, action).",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "response",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "to",
-                    "type": "string",
-                    "description": "Recipient phone number that was used."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_send_location",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Sends a location pin as a WhatsApp message via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "to",
-                    "label": "To",
-                    "type": "string",
-                    "description": "Recipient phone number in E.164 format.",
-                    "required": true
-                },
-                {
-                    "key": "longitude",
-                    "label": "Longitude",
-                    "type": "number",
-                    "description": "Decimal longitude coordinate.",
-                    "required": true
-                },
-                {
-                    "key": "latitude",
-                    "label": "Latitude",
-                    "type": "number",
-                    "description": "Decimal latitude coordinate.",
-                    "required": true
-                },
-                {
-                    "key": "location_name",
-                    "label": "Location Name",
-                    "type": "string",
-                    "description": "Display name of the location."
-                },
-                {
-                    "key": "address",
-                    "label": "Address",
-                    "type": "string",
-                    "description": "Street address of the location."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "response",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "to",
-                    "type": "string",
-                    "description": "Recipient phone number that was used."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_list_messages",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Lists WhatsApp messages, optionally filtered by contact, via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "contact_id",
-                    "label": "Contact ID",
-                    "type": "string",
-                    "description": "Optional contact ID to filter messages for a specific contact."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "messages",
-                    "type": "string",
-                    "description": "Raw JSON list of messages from the turn.io API."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_check_contact",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Checks whether one or more phone numbers are registered WhatsApp users via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "contacts",
-                    "label": "Contacts",
-                    "type": "array",
-                    "description": "List of phone numbers to check (E.164 format). Use this or 'phone', not both."
-                },
-                {
-                    "key": "phone",
-                    "label": "Phone",
-                    "type": "string",
-                    "description": "Single phone number to check (used when 'contacts' is not set)."
-                },
-                {
-                    "key": "blocking",
-                    "label": "Blocking Mode",
-                    "type": "select",
-                    "description": "Whether to wait for the result.",
-                    "options": [
-                        "wait",
-                        "no_wait"
-                    ],
-                    "defaultValue": "wait"
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "contacts",
-                    "type": "string",
-                    "description": "Raw JSON response with contact check results."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_upload_contacts",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Uploads a list of phone numbers to turn.io for contact validation.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "contacts",
-                    "label": "Contacts",
-                    "type": "array",
-                    "description": "List of phone numbers in E.164 format to upload.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "result",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_update_profile",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Updates the WhatsApp Business profile information via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "profile",
-                    "label": "Profile Object",
-                    "type": "json",
-                    "description": "Full profile object to set. If provided, individual fields (description, email, address) are ignored."
-                },
-                {
-                    "key": "description",
-                    "label": "Description",
-                    "type": "string",
-                    "description": "Business description (used when 'profile' is not set)."
-                },
-                {
-                    "key": "email",
-                    "label": "Email",
-                    "type": "string",
-                    "description": "Business email address (used when 'profile' is not set)."
-                },
-                {
-                    "key": "address",
-                    "label": "Address",
-                    "type": "string",
-                    "description": "Business address (used when 'profile' is not set)."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "result",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_upload_media",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Uploads a media file to turn.io for use in subsequent media messages.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "media_url",
-                    "label": "Media URL",
-                    "type": "string",
-                    "description": "Publicly accessible URL of the media to upload. Use this or file_data, not both."
-                },
-                {
-                    "key": "file_data",
-                    "label": "File Data",
-                    "type": "string",
-                    "description": "Raw file data string for multipart upload (used when media_url is not set)."
-                },
-                {
-                    "key": "file_name",
-                    "label": "File Name",
-                    "type": "string",
-                    "description": "File name for the multipart upload."
-                },
-                {
-                    "key": "mime_type",
-                    "label": "MIME Type",
-                    "type": "string",
-                    "description": "MIME content type of the file (e.g. image/jpeg)."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "result",
-                    "type": "string",
-                    "description": "Raw JSON response containing the uploaded media ID."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_get_media",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Retrieves metadata for a previously uploaded media object via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "media_id",
-                    "label": "Media ID",
-                    "type": "string",
-                    "description": "ID of the media object to retrieve.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "media",
-                    "type": "string",
-                    "description": "Raw JSON response with media metadata."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_delete_media",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Deletes a previously uploaded media object from turn.io.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "media_id",
-                    "label": "Media ID",
-                    "type": "string",
-                    "description": "ID of the media object to delete.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "deleted",
-                    "type": "boolean",
-                    "description": "True when the media was successfully deleted."
-                },
-                {
-                    "key": "media_id",
-                    "type": "string",
-                    "description": "ID of the deleted media object."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_create_template",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Creates a new WhatsApp message template via the turn.io API for approval.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "template_name",
-                    "label": "Template Name",
-                    "type": "string",
-                    "description": "Unique name for the new message template.",
-                    "required": true
-                },
-                {
-                    "key": "category",
-                    "label": "Category",
-                    "type": "select",
-                    "description": "Template category.",
-                    "options": [
-                        "MARKETING",
-                        "UTILITY",
-                        "AUTHENTICATION"
-                    ]
-                },
-                {
-                    "key": "language_code",
-                    "label": "Language Code",
-                    "type": "string",
-                    "description": "BCP-47 language code for the template."
-                },
-                {
-                    "key": "components",
-                    "label": "Components",
-                    "type": "json",
-                    "description": "Template component definitions (header, body, footer, buttons) as JSON."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "template",
-                    "type": "string",
-                    "description": "Raw JSON response with the created template details."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_list_templates",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Lists all registered WhatsApp message templates via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "templates",
-                    "type": "string",
-                    "description": "Raw JSON list of message templates."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_fetch_template",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Fetches the details of a specific WhatsApp message template by name via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "template_name",
-                    "label": "Template Name",
-                    "type": "string",
-                    "description": "Name of the template to fetch.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "template",
-                    "type": "string",
-                    "description": "Raw JSON response with template details."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_update_template",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Updates an existing WhatsApp message template via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "template_name",
-                    "label": "Template Name",
-                    "type": "string",
-                    "description": "Name of the template to update.",
-                    "required": true
-                },
-                {
-                    "key": "updates",
-                    "label": "Updates",
-                    "type": "json",
-                    "description": "Fields to update on the template as JSON object."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "template",
-                    "type": "string",
-                    "description": "Raw JSON response with the updated template details."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_delete_template",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Deletes a WhatsApp message template by name via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "template_name",
-                    "label": "Template Name",
-                    "type": "string",
-                    "description": "Name of the template to delete.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "deleted",
-                    "type": "boolean",
-                    "description": "True when the template was successfully deleted."
-                },
-                {
-                    "key": "template_name",
-                    "type": "string",
-                    "description": "Name of the deleted template."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_configure_webhook",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Configures the turn.io webhook endpoint for receiving inbound WhatsApp messages.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "webhook_url",
-                    "label": "Webhook URL",
-                    "type": "string",
-                    "description": "HTTPS URL where turn.io should deliver inbound message events.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "result",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "webhook_url",
-                    "type": "string",
-                    "description": "The configured webhook URL."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_create_flow",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Creates a new WhatsApp Flow via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "flow_name",
-                    "label": "Flow Name",
-                    "type": "string",
-                    "description": "Unique name for the WhatsApp Flow.",
-                    "required": true
-                },
-                {
-                    "key": "description",
-                    "label": "Description",
-                    "type": "string",
-                    "description": "Human-readable description of the flow."
-                },
-                {
-                    "key": "steps",
-                    "label": "Flow Steps",
-                    "type": "json",
-                    "description": "Flow step definitions as a JSON object."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "flow",
-                    "type": "string",
-                    "description": "Raw JSON response with the created flow details."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_list_flows",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Lists all WhatsApp Flows registered in the turn.io account.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "flows",
-                    "type": "string",
-                    "description": "Raw JSON list of WhatsApp Flows."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_send_flow",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Sends a WhatsApp Flow to a contact as an interactive message via the turn.io API.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "to",
-                    "label": "To",
-                    "type": "string",
-                    "description": "Recipient phone number in E.164 format.",
-                    "required": true
-                },
-                {
-                    "key": "flow_id",
-                    "label": "Flow ID",
-                    "type": "string",
-                    "description": "ID of the WhatsApp Flow to send.",
-                    "required": true
-                },
-                {
-                    "key": "flow_cta",
-                    "label": "Call-to-Action Text",
-                    "type": "string",
-                    "description": "Button label that opens the flow (e.g. 'Start')."
-                },
-                {
-                    "key": "flow_action",
-                    "label": "Flow Action",
-                    "type": "string",
-                    "description": "Action to perform when the flow opens (e.g. 'navigate')."
-                },
-                {
-                    "key": "flow_message_version",
-                    "label": "Message Version",
-                    "type": "number",
-                    "description": "WhatsApp Flow message version number.",
-                    "defaultValue": 3
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "response",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "to",
-                    "type": "string",
-                    "description": "Recipient phone number that was used."
-                },
-                {
-                    "key": "flow_id",
-                    "type": "string",
-                    "description": "ID of the flow that was sent."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_list_journeys",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Lists all Journey automations configured in the turn.io account.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "journeys",
-                    "type": "string",
-                    "description": "Raw JSON list of journeys."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_trigger_journey",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Triggers a turn.io Journey automation for a specific contact by phone number.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "journey_id",
-                    "label": "Journey ID",
-                    "type": "string",
-                    "description": "ID of the journey to trigger.",
-                    "required": true
-                },
-                {
-                    "key": "phone",
-                    "label": "Phone",
-                    "type": "string",
-                    "description": "Contact phone number in E.164 format.",
-                    "required": true
-                },
-                {
-                    "key": "data",
-                    "label": "Data",
-                    "type": "json",
-                    "description": "Optional key-value data to pass into the journey as context."
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "result",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "journey_id",
-                    "type": "string",
-                    "description": "ID of the triggered journey."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_get_context",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Retrieves the conversation context data stored for a contact in turn.io.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "contact_id",
-                    "label": "Contact ID",
-                    "type": "string",
-                    "description": "ID of the contact whose context to retrieve.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "context",
-                    "type": "string",
-                    "description": "Raw JSON response containing the contact's context data."
-                },
-                {
-                    "key": "contact_id",
-                    "type": "string",
-                    "description": "ID of the contact."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        },
-        {
-            "type": "step.turnio_set_context",
-            "plugin": "workflow-plugin-turnio",
-            "description": "Updates the conversation context data stored for a contact in turn.io.",
-            "configFields": [
-                {
-                    "key": "module",
-                    "label": "Module",
-                    "type": "string",
-                    "description": "Name of the turnio.provider module instance to use.",
-                    "defaultValue": "turnio"
-                },
-                {
-                    "key": "contact_id",
-                    "label": "Contact ID",
-                    "type": "string",
-                    "description": "ID of the contact whose context to update.",
-                    "required": true
-                },
-                {
-                    "key": "context_data",
-                    "label": "Context Data",
-                    "type": "json",
-                    "description": "Key-value pairs to merge into the contact's context.",
-                    "required": true
-                }
-            ],
-            "outputs": [
-                {
-                    "key": "result",
-                    "type": "string",
-                    "description": "Raw JSON response from the turn.io API."
-                },
-                {
-                    "key": "contact_id",
-                    "type": "string",
-                    "description": "ID of the contact."
-                },
-                {
-                    "key": "error",
-                    "type": "string",
-                    "description": "Error message if the request failed."
-                }
-            ]
-        }
-    ],
-    "downloads": [
-        {
-            "os": "linux",
-            "arch": "amd64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-linux-amd64.tar.gz"
-        },
-        {
-            "os": "linux",
-            "arch": "arm64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-linux-arm64.tar.gz"
-        },
-        {
-            "os": "darwin",
-            "arch": "amd64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-darwin-amd64.tar.gz"
-        },
-        {
-            "os": "darwin",
-            "arch": "arm64",
-            "url": "https://github.com/GoCodeAlone/workflow-plugin-turnio/releases/download/v0.1.3/workflow-plugin-turnio-darwin-arm64.tar.gz"
-        }
-    ],
-    "contracts": [
-        {
-            "kind": "module",
-            "type": "turnio.provider",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_send_text",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_send_media",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_send_template",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_send_interactive",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_send_location",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_list_messages",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_check_contact",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_upload_contacts",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_update_profile",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_upload_media",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_get_media",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_delete_media",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_create_template",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_list_templates",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_fetch_template",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_update_template",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_delete_template",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_configure_webhook",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_create_flow",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_list_flows",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_send_flow",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_list_journeys",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_trigger_journey",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_get_context",
-            "mode": "strict_proto"
-        },
-        {
-            "kind": "step",
-            "type": "step.turnio_set_context",
-            "mode": "strict_proto"
-        }
-    ],
-    "capabilities": {
-        "configProvider": false,
-        "moduleTypes": [
-            "turnio.provider"
-        ],
-        "stepTypes": [
-            "step.turnio_send_media",
-            "step.turnio_send_text"
-        ],
-        "triggerTypes": []
-    }
+    "triggerTypes": []
+  }
 }
